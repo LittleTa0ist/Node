@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        textarea {
+            display: block;
+            margin: 0 auto;
+            background-color: pink;
+            width: 300px;
+            height: 500px;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea name="" id="" cols="30" rows="10">
+        等待获取数据
+    </textarea>
+    <button>获取猫眼数据get</button>
+    <button>获取小米数据post</button>
+
+
+    <script>
+        const textarea = document.querySelector('textarea')
+        const btn = document.querySelectorAll('button')
+        async function getData(url) {
+            let res = await fetch(url)
+            res = await res.json()
+            return res
+        }
+        btn[0].onclick = () => {
+            getData('http://127.0.0.1:3000/api/maoyan').then(res => {
+                console.log(res);
+                textarea.innerText = JSON.stringify(res)
+            })
+        }
+        btn[1].onclick = () => {
+            getData('http://127.0.0.1:3000/api/xiaomi').then(res => {
+                console.log(res);
+                textarea.innerText = JSON.stringify(res)
+            })
+        }
+    </script>
+</body>
+
+</html>
