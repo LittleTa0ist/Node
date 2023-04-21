@@ -25,3 +25,6 @@ s.info()
 s.newinfo()
 // console.log(f.__proto__);
 // console.log(s.__proto__);
+
+
+// 寄生组合式继承
