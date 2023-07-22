@@ -39,6 +39,11 @@ const arr1 = [
         name: "系统管理1-1-2",
         parentMenu: 4,
     },
+    {
+        menuId: 9,
+        name: "系统管理1-1-2",
+        parentMenu: 8,
+    },
 ];
 const arrTotree = (arr) => {
     let newArr = JSON.parse(JSON.stringify(arr))
