@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- <title><%= title %></title> -->
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+
+<body>
+  <!-- <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p> -->
+  <div>
+    <div><button id="logout">退出登录</button></div>
+    <div>id<input type="text" id="id"></div>
+    <div>username:<input type="text" id="username"></div>
+    <div>password:<input type="password" id="password"></div>
+    <div>
+      <button id="get">查询</button>
+      <button id="add">添加</button>
+      <button id="modify">修改</button>
+      <button id="delete">删除</button>
+    </div>
+  </div>
+
+</body>
+<script>
+  const btnGet = document.querySelector('#get')
+  const btnAdd = document.querySelector('#add')
+  const btnModify = document.querySelector('#modify')
+  const btnDetele = document.querySelector('#delete')
+  const btnLogout = document.querySelector('#logout')
+  const id = document.querySelector('#id')
+  const username = document.querySelector('#username')
+  const password = document.querySelector('#password')
+  const sendRequest = (method) => {
+    if (method === 'GET') {
+      fetch('api/user')
+        .then(res => res.json())
+        .then(res => {
+          if (res.ok === 0) {
+            location.href = '/login'
+          }
+          console.log(res);
+        })
+    } else {
+      fetch('api/user', {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id: id.value,
+          username: username.value,
+          password: password.value
+        })
+
+      }).then(res => res.json())
+        .then(res => {
+          location.href = '/login'
+          console.log(res);
+        })
+    }
+
+  }
+
+  btnGet.onclick = () => sendRequest('GET')
+  btnAdd.onclick = () => sendRequest('POST')
+  btnModify.onclick = () => sendRequest('PUT')
+  btnDetele.onclick = () => sendRequest('DELETE')
+  btnLogout.onclick = () => {
+    fetch('/api/logout').then(res => res.json()).then(res => {
+      if (res.ok === 1) location.href = '/login'
+    })
+  }
+</script>
+
+</html>
