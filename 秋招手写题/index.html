@@ -1,14 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
-    
+    <style>
+        .F {
+            width: 400px;
+            display: flex;
+            background-color: red;
+            height: 600px;
+        }
 
-    <script src="./转驼命名法.js"></script>
+        .A {
+            width: 500px;
+            flex-shrink: 1;
+            background-color: pink;
+        }
+
+        .B {
+            width: 400px;
+            flex-shrink: 200;
+            background-color: blue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="F">
+        <div class="A"></div>
+        <div class="B"></div>
+    </div>
+    <script>
+        var a = 3;
+        var total = 0;
+        var res = [];
+
+        function foo(a) {
+            for (var i = 0; i < 3; ++i) {
+                res[i] = (function (i) {
+                    return function () {
+                        total += i * a;
+                        console.log(total);
+
+                    }
+                })(i)
+            }
+        }
+        foo(1);
+
+        res[0]();
+        res[1]();
+        res[2]();
+    </script>
 </body>
+
 </html>
