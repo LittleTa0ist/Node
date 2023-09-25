@@ -1,17 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <style>
+    .container {
+      width: 400px;
+      height: 200px;
+      border: 1px solid #000;
+      margin: 20px auto;
+      overflow: hidden;
+    }
+
+    .content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      transition: all 0.5s;
+      transform: translateX();
+    }
+
+    .content .item {
+      z-index: -1;
+      flex-shrink: 0;
+      height: 100%;
+      width: 100%;
+      background: aqua;
+      /* border: 1px solid #000; */
+    }
+  </style>
 </head>
+
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <div class="container">
+    <div class="content">
+      <div class="item">111</div>
+      <div class="item">222</div>
+      <div class="item">333</div>
+      <div class="item">444</div>
+      <div class="item">111</div>
+    </div>
+  </div>
+  <button id="left">left</button>
+  <button id="right">right</button>
   <script>
-    axios.get('http://140.143.171.144:7100/news_latest').then(res=>{
-      console.log(res);
-    })
+    let content = document.querySelector('.content')
+    let items = document.querySelectorAll('.item')
+    let len = items.length
+    let left = document.querySelector('#left')
+    let right = document.querySelector('#right')
+    let index = 0
+    const change=()=>{
+      index++
+      content.style.transition = 'all 0.5s'
+      content.style.transform = `translateX(${-index * 400}px)`
+      if (index == 4) {
+        index = 0
+        setTimeout(() => {
+          content.style.transition = 'none'
+          content.style.transform = `translateX(${-index * 400}px)`
+        },500)
+      }
+    }
+    right.addEventListener('click', change)
+    setInterval(change,2000)
   </script>
 </body>
+
 </html>

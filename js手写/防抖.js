@@ -1,14 +1,18 @@
 function debounce(fn, duration, immediate = false) {
     let timer = null
-    let isfirst = true
+    let result;
+    // let isfirst = true
     return function (...args) {
+        let now = immediate && !timer
         if (timer) clearTimeout(timer)
-        if (immediate && isfirst) {
-            fn.call(this, ...args)
-            isfirst=false
-        }
         timer = setTimeout(() => {
-            fn.call(this, ...args)
+            if (!immediate) result = fn.call(this, ...args)
+            clearTimeout(timer)
         }, duration)
+
+        if (now) {
+            result = fn.call(this, ...args)
+        }
+        return result
     }
 }

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 ">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        (function () {
+            function setRem() {
+                let deviceWidth = document.body.clientWidth || document.documentElement.clientWidth
+                let width = 750
+                let ratio = deviceWidth / width * 100
+                if (deviceWidth > 750) {
+                    ratio = 100
+                }
+                let html = document.querySelector('html')
+                html.style.fontSize = ratio + 'px'
+                console.log(ratio);
+            }
+            setRem()
+            window.onresize = setRem
+            window.onload = setRem
+        })()
+    </script>
+</body>
+
+</html>

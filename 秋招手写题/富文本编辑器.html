@@ -1,0 +1,165 @@
+// 实现一个简单的富文本编辑器
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>富文本编辑器</title>
+  <style>
+    .toolbar {
+      border: 1px solid #ccc;
+      padding: 5px;
+      background-color: #f7f7f7;
+    }
+
+    .toolbar button {
+      margin-right: 5px;
+    }
+
+    .editor {
+      border: 1px solid #ccc;
+      min-height: 200px;
+      padding: 5px;
+      background-color: #fff;
+      margin-top: 10px;
+    }
+
+    .preview {
+      border: 1px solid #ccc;
+      min-height: 200px;
+      padding: 5px;
+      background-color: #fff;
+      margin-top: 10px;
+    }
+
+    .mask {
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      /* display: none; */
+    }
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 0 20px;
+      width: 300px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      height: 250px;
+      border-radius: 10px;
+    }
+
+    .container input {
+      padding: 5px;
+      border-radius: 5px;
+      width: 100%;
+      height: 50px;
+    }
+
+    .container button {
+      width: 100px;
+      height: 30px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <!-- <button type="button" onclick="document.execCommand('bold', true, null);">
+        加粗
+      </button> -->
+    <button onclick="makeBold()">加粗</button>
+    <button type="button" onclick="document.execCommand('italic', false, null);">
+      斜体
+    </button>
+    <button type="button" onclick="document.execCommand('underline', false, null)">
+      下划线
+    </button>
+    <button type="button" onclick="document.execCommand('insertUnorderedList', false, null);">
+      无序列表
+    </button>
+    <button type="button" onclick="document.execCommand('insertOrderedList', false, null);">
+      有序列表
+    </button>
+    <button type="button" onclick="myCreateLink()">
+      插入链接
+    </button>
+    <button type="button" onclick="document.execCommand('insertImage', false, prompt('请输入图片地址：'));">
+      插入图片
+    </button>
+  </div>
+  <div class="editor" contenteditable="true"></div>
+  <div class="preview"></div>
+  <div class="mask">
+    <div class="container">
+      <input type="text" class="link" required placeholder="链接">
+      <input type="text" class="alias" placeholder="别名">
+      <button onclick="handleLink()">确定</button>
+    </div>
+  </div>
+</body>
+<script>
+  // 获取相关元素
+  const editor = document.querySelector(".editor");
+  const preview = document.querySelector(".preview");
+  const toolbar = document.querySelector(".toolbar");
+  const myCreateLink = () => {
+    // document.execCommand('insertHTML', false,  prompt('请输入链接地址：'))
+    const mask = document.querySelector('.mask')
+    mask.style.display = 'flex'
+    // document.execCommand('createLink', false, prompt('请输入链接地址：'))
+  }
+  const handleLink = () => {
+    // document.execCommand('insertHTML', false,  prompt('请输入链接地址：'))
+    const link = document.querySelector('.link')
+    const alias = document.querySelector('.alias')
+    if (!link.value) {
+      alert('必须输入url')
+    }
+    let content = `<a href=${link.value}>${link.value}</a>`
+    if (alias.value && alias.value.trim()) content = `<a href=${link.value}>${alias.value}</a>`
+    editor.focus()
+    document.execCommand('insertHTML', false,  content)
+    const mask = document.querySelector('.mask')
+    mask.style.display = 'none'
+  }
+
+
+  // 监听工具栏按钮点击事件
+  toolbar.addEventListener("click", (e) => {
+    const command = e.target.getAttribute("data-command");
+    console.log(command);
+    if (command) {
+      e.preventDefault();
+      document.execCommand(command, false, null);
+    }
+  });
+
+  // 监听编辑区域输入事件
+  editor.addEventListener("input", (e) => {
+    preview.innerHTML = editor.innerHTML;
+  });
+
+  // 使用Range对象来控制文本的样式
+  function makeBold() {
+    let range = window.getSelection().getRangeAt(0); // 获取当前选区范围
+    let b = document.createElement("b"); // 创建加粗标签
+    b.textContent = range.toString(); // 将选中文本作为加粗标签的内容
+    range.deleteContents(); // 删除选中文本
+    range.insertNode(b); // 在选区范围内插入加粗标签
+    range.setStartAfter(b);
+    range.setEndAfter(b); // 设置光标位置
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range); // 重新设置选区范围
+  }
+</script>
+
+</html>

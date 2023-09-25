@@ -45,12 +45,63 @@ const arr1 = [
         parentMenu: 8,
     },
 ];
+// const arrTotree = (arr) => {
+//     let newArr = JSON.parse(JSON.stringify(arr))
+//     return newArr.filter(parent => {
+//         let children = newArr.filter(item => parent.menuId === item.parentMenu)
+//         children.length&& (parent.children = children)
+//         return parent.parentMenu == null
+//     })
+// }
+
 const arrTotree = (arr) => {
-    let newArr = JSON.parse(JSON.stringify(arr))
-    return newArr.filter(parent => {
-        let children = newArr.filter(item => parent.menuId === item.parentMenu)
-        children.length&& (parent.children = children)
-        return parent.parentMenu == null
-    })
+    arr = JSON.parse(JSON.stringify(arr))
+    let newArr = []
+    arr.forEach(element => {
+        if (!element.parentMenu) newArr.push(element)
+        else {
+            arr.forEach(item => {
+                if (item.menuId === element.parentMenu) {
+                    item.children ? item.children.push(element) : item.children = [element]
+                }
+            })
+        }
+    });
+    return newArr
 }
-console.log(arrTotree(arr1));
+let tree = arrTotree(arr1)
+
+// 层序遍历
+// const treeToarr = (arr) => {
+//     if (!(arr instanceof Array)) throw 'err'
+//     if (arr.length === 0) return arr
+//     let newArr = JSON.parse(JSON.stringify(arr))
+//     let res = []
+//     while (newArr.length) {
+//         let temp = newArr.shift()
+//         res.push(temp)
+//         if (temp.children) {
+//             temp.children.forEach(item => {
+//                 newArr.push(item)
+//             })
+//         }
+//         delete temp.children
+//     }
+//     return res
+// }
+
+
+const treeToarr = (arr, res = []) => {
+    let newArr = JSON.parse(JSON.stringify(arr))
+    newArr.forEach(item => {
+        if (!item.children) res.push(item)
+        else {
+            res.push(item)
+            res.concat(treeToarr(item.children, res))
+            delete item.children
+        }
+
+    })
+    return res
+}
+console.log(treeToarr(tree));
